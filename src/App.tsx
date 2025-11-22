@@ -5,6 +5,9 @@ import SocialSidebar from './components/SocialSideBar';
 import About from './components/About';
 import Education from './components/Education';
 import TechStack from './components/TechStack';
+import Projects from './components/Projects';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
 
 // Custom scrollbar styles
 const scrollbarStyles = `
@@ -46,6 +49,9 @@ function App() {
           </div>
           <Education/>
           <TechStack/>
+          <Projects/>
+          <Contact/>
+          <Footer/>
         </div>
       </div>
     </>
