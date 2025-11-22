@@ -3,6 +3,8 @@ import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import SocialSidebar from './components/SocialSideBar';
 import About from './components/About';
+import Education from './components/Education';
+import TechStack from './components/TechStack';
 
 // Custom scrollbar styles
 const scrollbarStyles = `
@@ -39,9 +41,11 @@ function App() {
           <Header />
           <SocialSidebar />
           <HeroSection />
-          <div className='my-2'>
+          <div className='my-1'>
               <About/>
           </div>
+          <Education/>
+          <TechStack/>
         </div>
       </div>
     </>
