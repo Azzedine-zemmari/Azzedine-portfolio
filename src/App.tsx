@@ -2,6 +2,7 @@ import './App.css'
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import SocialSidebar from './components/SocialSideBar';
+import About from './components/About';
 
 // Custom scrollbar styles
 const scrollbarStyles = `
@@ -38,6 +39,9 @@ function App() {
           <Header />
           <SocialSidebar />
           <HeroSection />
+          <div className='my-2'>
+              <About/>
+          </div>
         </div>
       </div>
     </>
