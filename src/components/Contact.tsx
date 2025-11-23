@@ -1,4 +1,5 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import '../Contact.css'
 import emailjs from "@emailjs/browser";
 const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -88,7 +89,7 @@ const sanitizedData = {
         setIsLoading(true);
 
         try {
-            const response = await emailjs.send(
+            await emailjs.send(
                 serviceId,
                 templateId,
                 sanitizedData,
@@ -218,9 +219,9 @@ const sanitizedData = {
                         </div>
                         <input type="text"  name="company" 
   id="company"
-  autocomplete="off"
-  tabindex="-1"
-  class="honeypot" />
+  autoComplete="off"
+  tabIndex={1}
+  className="honeypot" />
 
                         <div>
                             <label htmlFor="email" className="block text-gray-900 font-semibold mb-2">

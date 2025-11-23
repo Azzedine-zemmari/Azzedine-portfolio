@@ -1,7 +1,7 @@
 import './App.css'
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
-import SocialSidebar from './components/SocialSideBar';
+import SocialSidebar from './components/SocialSidebar';
 import About from './components/About';
 import Education from './components/Education';
 import TechStack from './components/TechStack';
