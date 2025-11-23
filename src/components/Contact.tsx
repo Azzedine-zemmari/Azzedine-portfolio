@@ -1,4 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
+import '../Contact.css'
 import emailjs from "@emailjs/browser";
 const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -78,9 +79,9 @@ const sanitizedData = {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const companyField = document.getElementById("company") as HTMLInputElement;
+        const honeypot = document.getElementById("company") as HTMLInputElement;
 
-        if (companyField && companyField.value !== "") {
+        if (honeypot?.value.trim() !== "") {
             return; // bot detected
         }   
         if (!validate()) return;
@@ -215,7 +216,11 @@ const sanitizedData = {
                                 <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                             )}
                         </div>
-                        <input type="hidden" name="company" id="company" />
+                        <input type="text"  name="company" 
+  id="company"
+  autocomplete="off"
+  tabindex="-1"
+  class="honeypot" />
 
                         <div>
                             <label htmlFor="email" className="block text-gray-900 font-semibold mb-2">
@@ -285,18 +290,7 @@ const sanitizedData = {
                 </form>
             </div>
 
-            <style>{`
-        @keyframes slide-in {
-          from { transform: translateX(400px); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes progress {
-          from { width: 100%; }
-          to { width: 0%; }
-        }
-        .animate-slide-in { animation: slide-in 0.4s ease-out; }
-        .animate-progress { animation: progress 5s linear; }
-      `}</style>
+        
         </div>
     );
 }
