@@ -1,5 +1,9 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import emailjs from "@emailjs/browser";
+const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
 
 interface FormData {
     name: string;
@@ -18,6 +22,8 @@ function Contact() {
 
     const [showSuccess, setShowSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState<Partial<FormData>>({});
+
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({
@@ -26,32 +32,74 @@ function Contact() {
         });
     };
 
+    const validate = () => {
+    const newErrors: Partial<FormData> = {};
+
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    else if (formData.name.length < 3) newErrors.name = "Name must be at least 3 characters.";
+
+    if (!formData.email.trim()) newErrors.email = "Email is required.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+        newErrors.email = "Enter a valid email address.";
+
+    if (!formData.subject.trim()) newErrors.subject = "Subject is required.";
+    else if (formData.subject.length < 3) newErrors.subject = "Subject is too short.";
+
+    if (!formData.message.trim()) newErrors.message = "Message is required.";
+    else if (formData.message.length < 10)
+        newErrors.message = "Your message must be at least 10 characters.";
+    else if(formData.message.length > 1000){
+        alert("Too Long");
+        return;
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+};
+
+const sanitize = (value: string): string => {
+    return value
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/`/g, "&#96;");
+};
+
+const sanitizedData = {
+    name: sanitize(formData.name),
+    email: sanitize(formData.email),
+    subject: sanitize(formData.subject),
+    message: sanitize(formData.message),
+};
+
+
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const companyField = document.getElementById("company") as HTMLInputElement;
+
+        if (companyField && companyField.value !== "") {
+            return; // bot detected
+        }   
+        if (!validate()) return;
         setIsLoading(true);
 
         try {
             const response = await emailjs.send(
-                "service_1wrv6aq",
-                "template_tsezuqd",
-                {
-                    name: formData.name,
-                    email: formData.email,
-                    subject: formData.subject,
-                    message: formData.message,
-                },
-                "N1exg5t1NZWq8Pgrb"
+                serviceId,
+                templateId,
+                sanitizedData,
+                publicKey
             );
 
-            console.log("SUCCESS:", response.status);
             setIsLoading(false);
             setShowSuccess(true);
             setFormData({ name: '', email: '', subject: '', message: '' });
             setTimeout(() => setShowSuccess(false), 5000);
         } catch (error) {
-            console.error("ERROR:", error);
             setIsLoading(false);
-            alert("Failed to send message.");
         }
     };
 
@@ -161,9 +209,13 @@ function Contact() {
                                 onChange={handleChange}
                                 disabled={isLoading}
                                 placeholder="John Doe"
-                                className="w-full px-4 py-3 border-2 border-gray-900 rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={`w-full px-4 py-3 border-2 ${errors.name ? "border-red-300" : "border-gray-900"}  rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] disabled:opacity-50 disabled:cursor-not-allowed`}
                             />
+                            {errors.name && (
+                                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                            )}
                         </div>
+                        <input type="hidden" name="company" id="company" />
 
                         <div>
                             <label htmlFor="email" className="block text-gray-900 font-semibold mb-2">
@@ -177,8 +229,11 @@ function Contact() {
                                 onChange={handleChange}
                                 disabled={isLoading}
                                 placeholder="john@example.com"
-                                className="w-full px-4 py-3 border-2 border-gray-900 rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={`w-full px-4 py-3 border-2 ${errors.email ? "border-red-300" : "border-gray-900"}  rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] disabled:opacity-50 disabled:cursor-not-allowed`}
                             />
+                            {errors.email && (
+                                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                            )}
                         </div>
                     </div>
 
@@ -194,8 +249,11 @@ function Contact() {
                             onChange={handleChange}
                             disabled={isLoading}
                             placeholder="Project Discussion"
-                            className="w-full px-4 py-3 border-2 border-gray-900 rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={`w-full px-4 py-3 border-2 ${errors.subject ? "border-red-300" : "border-gray-900"}  rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] disabled:opacity-50 disabled:cursor-not-allowed`}
                         />
+                        {errors.subject && (
+                                <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
+                            )}
                     </div>
 
                     <div className="mb-8">
@@ -210,8 +268,11 @@ function Contact() {
                             disabled={isLoading}
                             rows={6}
                             placeholder="Tell me about your project..."
-                            className="w-full px-4 py-3 border-2 border-gray-900 rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={`w-full px-4 py-3 border-2 ${errors.message ? "border-red-300" : "border-gray-900"}  rounded-lg focus:outline-none focus:border-amber-400 transition-colors duration-200 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:shadow-[4px_4px_0px_0px_rgba(251,191,36,1)] disabled:opacity-50 disabled:cursor-not-allowed`}
                         ></textarea>
+                        {errors.message && (
+                                <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+                            )}
                     </div>
 
                     <button
