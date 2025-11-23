@@ -106,7 +106,7 @@ const sanitizedData = {
     };
 
     return (
-        <div className="lg:mx-24 py-16 relative">
+        <div id='contact' className="lg:mx-24 py-16 relative">
             {/* Success Alert */}
             {showSuccess && (
                 <div className="fixed top-8 right-8 z-50 animate-slide-in">

@@ -1,6 +1,6 @@
 function About(){
     return (
-        <div className="lg:mx-24 py-12">
+        <div id="about" className="lg:mx-24 py-12">
             <div className="flex flex-col justify-start mx-auto pt-5 pl-10">
                 <p className="text-amber-400 flex items-center text-xl gap-3 animate-fade-in">
                     <svg className="bg-amber-100 rounded-full p-1.5 hover:scale-110 transition-transform duration-300" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg">

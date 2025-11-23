@@ -125,7 +125,7 @@ function TechStack() {
     ];
 
     return (
-        <div className="lg:mx-24 py-16">
+        <div id="technologies" className="lg:mx-24 py-16">
             <div className="flex flex-col justify-start mx-auto pl-10 mb-16">
                 {/* Section Label */}
                 <p className="text-amber-400 flex items-center text-xl gap-3 mb-8">
