@@ -59,7 +59,7 @@ function HeroSection() {
 
             {/* Decorative image - hidden on mobile */}
             <div className="hidden lg:block absolute right-16 xl:right-32 top-1/3 h-24 w-24 xl:h-32 xl:w-32">
-                <img src='/src/assets/biker-svgrepo-com.svg' />
+                <img src='/biker-svgrepo-com.svg' />
             </div>
         </div>
     );
