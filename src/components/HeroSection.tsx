@@ -46,7 +46,7 @@ function HeroSection() {
                 </div>
 
                 <button className="group relative inline-flex h-[calc(44px+8px)] md:h-[calc(48px+8px)] items-center justify-center rounded-full bg-neutral-950 py-1 pl-5 md:pl-6 pr-12 md:pr-14 font-medium text-neutral-50 text-sm md:text-base">
-                    <span className="z-10 pr-2">Say Hello</span>
+                    <span className="z-10 pr-2"><a href="#contact">Say Hello</a></span>
                     <div className="absolute right-1 inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-end rounded-full bg-neutral-700 transition-[width] group-hover:w-[calc(100%-8px)]">
                         <div className="mr-3 md:mr-3.5 flex items-center justify-center">
                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 text-neutral-50">
