@@ -32,7 +32,7 @@ function Footer() {
                         </a>
                         <a
                             href="https://wa.me/212767228591"
-                            className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-amber-400 hover:text-gray-900 transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(251,191,36,1)]"
+                            className="w-10 h-10 rounded-full bg-white text-gray-900 flex items-center justify-center hover:bg-amber-400 hover:text-gray-900 transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(251,191,36,1)]"
 
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 50 50" className="w-4 h-4 md:w-5 md:h-5 text-gray-700">
@@ -41,7 +41,7 @@ function Footer() {
                         </a>
                         <a
                             href="https://discord.gg/azzedine2263"
-                            className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-amber-400 hover:text-gray-900 transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(251,191,36,1)]"
+                            className="w-10 h-10 rounded-full bg-white text-gray-900 flex items-center justify-center hover:bg-amber-400 hover:text-gray-900 transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(251,191,36,1)]"
 
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 50 50" className="w-4 h-4 md:w-5 md:h-5 text-gray-700">
