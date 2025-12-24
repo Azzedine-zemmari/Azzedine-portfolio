@@ -40,7 +40,7 @@ function Footer() {
                             </svg>
                         </a>
                         <a
-                            href="https://discord.gg/azzedine2263"
+                            href="https://discord.com/users/950346993706864650"
                             className="w-10 h-10 rounded-full bg-white text-gray-900 flex items-center justify-center hover:bg-amber-400 hover:text-gray-900 transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(251,191,36,1)]"
 
                         >
