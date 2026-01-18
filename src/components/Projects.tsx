@@ -110,6 +110,14 @@ function Projects() {
                             </a>
                         </div>
                     ))}
+                    <button 
+                    className="group relative inline-flex h-12 w-60 items-center justify-center gap-2 my-5 overflow-hidden rounded-md border-2 border-neutral-900 bg-white px-4 font-semibold text-neutral-900 transition-all duration-200 [box-shadow:5px_5px_0px_0px_rgb(82_82_82)] hover:[box-shadow:7px_7px_0px_0px_rgb(82_82_82)] hover:translate-x-[-2px] hover:translate-y-[-2px] active:translate-x-[3px] active:translate-y-[3px] active:[box-shadow:0px_0px_rgb(82_82_82)]">
+                    <a href="https://github.com/Azzedine-zemmari?tab=repositories" className="relative z-10">More ...</a>
+                    <svg className="relative z-10 group-hover:translate-y-0.5 transition-transform duration-200" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 20 20" height="1.2em" width="1.2em" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                    <div className="absolute inset-0 bg-gradient-to-r from-amber-50 to-orange-50 opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-md"></div>
+                </button>
                 </div>
             </div>
         </div>
