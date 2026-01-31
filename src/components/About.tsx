@@ -5,7 +5,7 @@ function About(){
 
     const handleDownload = () => {
         const link = document.createElement('a');
-        link.href = '/Azzedine (1).pdf'; 
+        link.href = '/azzedinezemmari_yc.pdf'; 
         link.download = 'ZEMMARI_AZZEDINE_CV.pdf';
         document.body.appendChild(link);
         link.click();
