@@ -3,7 +3,6 @@ import { Menu, X } from 'lucide-react';
 
 function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    console.log("redeploy")
 
     return (
         <header className="flex justify-between items-center px-4 md:px-8 py-4 md:py-6 border mx-2 md:mx-3 rounded-2xl shadow-lg">
