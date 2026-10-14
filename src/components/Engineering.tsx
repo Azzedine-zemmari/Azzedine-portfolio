@@ -128,9 +128,11 @@ export function Engineering() {
           title={t("eng.cases.title")}
           lead={t("eng.cases.lead")}
         >
-          <Reveal>
-            <CaseStudies />
-          </Reveal>
+        <Reveal className="w-full min-w-0">
+        <div className="w-full min-w-0">
+          <CaseStudies />
+        </div>
+      </Reveal>
         </SubBlock>
       </div>
     </section>
@@ -153,7 +155,7 @@ function SubBlock({
   children: ReactNode;
 }) {
   return (
-    <div id={id} className="mt-16 scroll-mt-24 md:mt-24">
+    <div id={id} className="mt-16 w-full min-w-0 scroll-mt-24 md:mt-24">
       <Reveal className="mb-8">
         <p className="eyebrow mb-3 flex items-center gap-3">
           <span className="text-neon">{index}</span>
