@@ -47,8 +47,8 @@ export function Hero() {
   }, []);
 
   return (
-    <div ref={heroRef} className="relative h-screen w-full overflow-hidden">
-      <div className="hero-content relative z-10 h-full flex flex-col justify-center">
+    <div ref={heroRef} className="relative min-h-screen w-full">
+      <div className="hero-content relative z-10 min-h-screen flex flex-col justify-center">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <HeroContent />
         </div>
@@ -63,7 +63,7 @@ function HeroContent() {
   const t = useT();
   const { site } = useContent();
   return (
-    <div className="pt-28 pb-20 md:pt-36 lg:pt-44">
+    <div className="py-16 md:py-20 lg:py-24">
       <p className="rise rise-1 eyebrow mb-8 flex flex-wrap items-center gap-x-3 gap-y-2">
         <span className="inline-block h-1.5 w-1.5 bg-neon animate-pulse" aria-hidden="true" />
         <span className="text-mist">{site.role}</span>
@@ -153,18 +153,23 @@ function SectionIndex() {
 
 function MetaStrip() {
   const t = useT();
+
   const stats: { key: UiKey; count: string }[] = [
-    { key: "hero.meta.projects", count: "4" },
+    { key: "hero.meta.projects", count: "20+" },
     { key: "hero.meta.tech", count: "25+" },
-    { key: "hero.meta.profiles", count: "4" },
     { key: "hero.meta.languages", count: "3" },
   ];
 
   return (
-    <dl className="rise rise-4 mt-16 grid grid-cols-2 gap-px overflow-hidden border-t border-line sm:grid-cols-4">
+    <dl className="rise rise-4 mx-auto mt-12 grid max-w-3xl grid-cols-1 gap-6 border-t border-line pt-6 sm:grid-cols-3 sm:gap-10">
       {stats.map((stat) => (
-        <div key={stat.key} className="flex items-baseline gap-3 py-5">
-          <dt className="display text-3xl text-chalk sm:text-4xl">{stat.count}</dt>
+        <div
+          key={stat.key}
+          className="flex items-baseline justify-center gap-3 text-center"
+        >
+          <dt className="display text-3xl text-chalk sm:text-4xl">
+            {stat.count}
+          </dt>
           <dd className="eyebrow">{t(stat.key, { count: stat.count })}</dd>
         </div>
       ))}
@@ -174,17 +179,26 @@ function MetaStrip() {
 
 function ScrollIndicator() {
   const t = useT();
+
   return (
-    <div className="absolute bottom-8 start-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-dim animate-bounce">
-      <span className="font-mono text-xs tracking-widest uppercase">{t("hero.scroll")}</span>
+    <div className="absolute bottom-8 start-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-dim">
+      <span className="font-mono text-xs tracking-widest uppercase">
+        {t("hero.scroll")}
+      </span>
+
       <svg
-        className="w-5 h-5 text-neon"
+        className="w-5 h-5 text-neon scroll-indicator"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
         aria-hidden="true"
       >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M19 14l-7 7m0 0l-7-7m7 7V3"
+        />
       </svg>
     </div>
   );
