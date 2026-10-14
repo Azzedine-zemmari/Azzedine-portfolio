@@ -462,6 +462,7 @@
     color: var(--color-neon);
     border-color: transparent;
   }
+}
 
   /* Chips / tags -------------------------------------------------------- */
   .tag {
@@ -691,5 +692,4 @@
     filter: none;
     animation: none;
   }
-}
 }
