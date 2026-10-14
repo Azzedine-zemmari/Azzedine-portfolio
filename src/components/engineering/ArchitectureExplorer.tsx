@@ -18,22 +18,35 @@ import { useEngineering, useT, type UiKey } from "../../i18n";
 import { useLowPowerDevice, useReducedMotion } from "../../hooks/useUi";
 import { TechIcon } from "../ui/TechIcon";
 
-const KIND_COLOR: Record<ArchNodeKind, number> = {
-  client: 0xd8a95c,
-  entry: 0xff5b2e,
-  security: 0xc2411d,
-  logic: 0xffb066,
-  persistence: 0x9a9a92,
-  store: 0x7fb0c8,
-  ops: 0x8b8880,
+/**
+ * Diagram palette.
+ *
+ * These are *content* colours — they distinguish node/edge categories in a
+ * technical diagram, so they intentionally keep their own hues rather than
+ * reusing the UI accent. They are CSS custom property references so the
+ * categories stay legible in both themes instead of being tuned for one
+ * background. The legend swatches use the same source, so a swatch always
+ * matches the geometry it describes.
+ *
+ * The Three.js path cannot consume `var()` and resolves them to numbers via
+ * `cssColorToNumber`, keeping the 3D scene on the identical palette.
+ */
+const KIND_VAR: Record<ArchNodeKind, string> = {
+  client: "var(--color-cyan)",
+  entry: "var(--color-neon)",
+  security: "var(--color-neon-dim)",
+  logic: "var(--color-cyan)",
+  persistence: "var(--color-mist)",
+  store: "var(--color-cyan)",
+  ops: "var(--color-violet)",
 };
 
-const EDGE_COLOR: Record<ArchEdge["kind"], number> = {
-  request: 0xff5b2e,
-  response: 0xd8a95c,
-  data: 0x9a9a92,
-  auth: 0xc2411d,
-  migration: 0x8b8880,
+const EDGE_VAR: Record<ArchEdge["kind"], string> = {
+  request: "var(--color-neon)",
+  response: "var(--color-cyan)",
+  data: "var(--color-mist)",
+  auth: "var(--color-neon-dim)",
+  migration: "var(--color-violet)",
 };
 
 const EDGE_LEGEND: Array<{ kind: ArchEdge["kind"]; key: UiKey }> = [
@@ -156,7 +169,7 @@ export function ArchitectureExplorer({
                 <li key={item.kind} className="flex items-center gap-1.5">
                   <span
                     className="h-2.5 w-2.5 rounded-[2px]"
-                    style={{ background: hex(KIND_COLOR[item.kind]) }}
+                    style={{ background: KIND_VAR[item.kind] }}
                     aria-hidden="true"
                   />
                   <span className="font-mono text-[10px] text-mist">{t(item.key)}</span>
@@ -168,7 +181,7 @@ export function ArchitectureExplorer({
                 <li key={item.kind} className="flex items-center gap-1.5">
                   <span
                     className="h-[2px] w-4"
-                    style={{ background: hex(EDGE_COLOR[item.kind]) }}
+                    style={{ background: EDGE_VAR[item.kind] }}
                     aria-hidden="true"
                   />
                   <span className="font-mono text-[10px] text-dim">{t(item.key)}</span>
@@ -227,7 +240,7 @@ export function ArchitectureExplorer({
                 >
                   <span
                     className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
-                    style={{ background: hex(KIND_COLOR[node.kind]) }}
+                    style={{ background: KIND_VAR[node.kind] }}
                     aria-hidden="true"
                   />
                   <span className="min-w-0 flex-1">
@@ -310,8 +323,20 @@ export function ArchitectureExplorer({
   );
 }
 
-function hex(n: number): string {
-  return `#${n.toString(16).padStart(6, "0")}`;
+/**
+ * Resolve a CSS custom property to a numeric colour for Three.js, which
+ * cannot consume `var()` references. Falls back to the dark-theme value when
+ * the stylesheet is not yet applied (SSR/prerender, or a non-browser DOM).
+ */
+function cssColorToNumber(cssVar: string, fallback: number): number {
+  if (typeof window === "undefined") return fallback;
+  const resolved = window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue(cssVar.replace(/^var\(|\)$/g, ""))
+    .trim();
+  if (!resolved.startsWith("#")) return fallback;
+  const value = parseInt(resolved.slice(1), 16);
+  return Number.isNaN(value) ? fallback : value;
 }
 
 /* ------------------------------------------------------------------ */
@@ -377,6 +402,49 @@ function ArchitectureCanvas({
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
 
+    // Diagram colours come from the CSS custom properties so the 3D scene
+    // uses exactly the same palette (and the same per-theme values) as the
+    // legend and the SVG fallback. Three.js needs numeric colours, so the
+    // var() references are resolved through the computed style.
+    const DARK_KIND: Record<ArchNodeKind, number> = {
+      client: 0x5fb3ea,
+      entry: 0x2fd8bd,
+      security: 0x24b8a0,
+      logic: 0x5fb3ea,
+      persistence: 0xa4b1c1,
+      store: 0x5fb3ea,
+      ops: 0x8a9bb0,
+    };
+    const DARK_EDGE: Record<ArchEdge["kind"], number> = {
+      request: 0x2fd8bd,
+      response: 0x5fb3ea,
+      data: 0xa4b1c1,
+      auth: 0x24b8a0,
+      migration: 0x8a9bb0,
+    };
+    const kindColor = (kind: ArchNodeKind) =>
+      cssColorToNumber(KIND_VAR[kind], DARK_KIND[kind]);
+    const edgeColor = (kind: ArchEdge["kind"]) =>
+      cssColorToNumber(EDGE_VAR[kind], DARK_EDGE[kind]);
+
+    // Light and dark need genuinely different scene lighting: the deep
+    // blue-black background absorbs light, while white paper reflects it and
+    // washes out an emissive accent unless the key light is pulled back.
+    const lightScene =
+      typeof document !== "undefined" &&
+      document.documentElement.getAttribute("data-theme") === "light";
+
+    // Node plates read as dark cards on the deep background in dark mode and
+    // as light cards on paper in light mode, so they track the surface token.
+    const nodeBodyColor = cssColorToNumber(
+      "var(--color-panel-2)",
+      lightScene ? 0xf2f5f8 : 0x18202b
+    );
+    const edgeStrokeColor = cssColorToNumber(
+      "var(--color-control)",
+      lightScene ? 0x74839a : 0x66768f
+    );
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 120);
     camera.position.set(0, 0.4, 13);
@@ -384,11 +452,17 @@ function ArchitectureCanvas({
     const rig = new THREE.Group();
     scene.add(rig);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.65));
-    const key = new THREE.DirectionalLight(0xff5b2e, 1.6);
+    scene.add(new THREE.AmbientLight(0xffffff, lightScene ? 1.15 : 0.65));
+    const key = new THREE.DirectionalLight(
+      kindColor("entry"),
+      lightScene ? 1.1 : 1.6
+    );
     key.position.set(6, 10, 8);
     scene.add(key);
-    const fill = new THREE.DirectionalLight(0x9ab6c8, 0.9);
+    const fill = new THREE.DirectionalLight(
+      cssColorToNumber("var(--color-cyan)", lightScene ? 0x0d5f96 : 0x5fb3ea),
+      lightScene ? 0.55 : 0.9
+    );
     fill.position.set(-7, 4, 6);
     scene.add(fill);
 
@@ -402,9 +476,9 @@ function ArchitectureCanvas({
       const [x, y, z] = ARCH_LAYER_POS[node.layer];
       const geo = new THREE.BoxGeometry(2.05, 0.72, 0.16);
       const mat = new THREE.MeshStandardMaterial({
-        color: 0x17171b,
-        emissive: new THREE.Color(KIND_COLOR[node.kind]),
-        emissiveIntensity: 0.35,
+        color: nodeBodyColor,
+        emissive: new THREE.Color(kindColor(node.kind)),
+        emissiveIntensity: lightScene ? 0.5 : 0.35,
         metalness: 0.4,
         roughness: 0.35,
       });
@@ -416,7 +490,7 @@ function ArchitectureCanvas({
       const edges = new THREE.LineSegments(
         new THREE.EdgesGeometry(geo),
         new THREE.LineBasicMaterial({
-          color: KIND_COLOR[node.kind],
+          color: kindColor(node.kind),
           transparent: true,
           opacity: 0.9,
         })
@@ -455,7 +529,7 @@ function ArchitectureCanvas({
       const points = curve.getPoints(40);
       const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
       const baseMat = new THREE.LineBasicMaterial({
-        color: EDGE_COLOR[edge.kind],
+        color: edgeStrokeColor,
         transparent: true,
         opacity: 0.28,
       });
@@ -468,10 +542,13 @@ function ArchitectureCanvas({
       const count = 2;
       for (let i = 0; i < count; i++) {
         const pktMat = new THREE.MeshBasicMaterial({
-          color: EDGE_COLOR[edge.kind],
+          color: edgeColor(edge.kind),
           transparent: true,
           opacity: 0.95,
-          blending: THREE.AdditiveBlending,
+          // Additive blending only reads correctly on the deep background; on
+          // light paper it would blow out to white, so packets use normal
+          // blending there (same approach as the site background scene).
+          blending: lightScene ? THREE.NormalBlending : THREE.AdditiveBlending,
         });
         const pkt = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), pktMat);
         rig.add(pkt);
@@ -678,16 +755,12 @@ function ArchitectureCanvas({
       className="relative h-[420px] w-full sm:h-[480px]"
       style={{ touchAction: "none" }}
     >
-      {/* faint grid backdrop */}
+      {/* faint grid backdrop — built from the line token so it stays a subtle
+          hairline in both themes instead of a fixed dark grey that turns
+          into harsh visible lines on light paper */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.35]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(38,38,44,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(38,38,44,0.6) 1px, transparent 1px)",
-          backgroundSize: "44px 44px",
-          maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent 80%)",
-        }}
+        className="pointer-events-none absolute inset-0 bg-grid opacity-40"
       />
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       <div className="pointer-events-none absolute inset-0">
@@ -705,8 +778,8 @@ function ArchitectureCanvas({
               aria-label={`${node.label}: ${node.responsibility}`}
               className={`pointer-events-auto absolute top-0 left-0 max-w-[8.5rem] rounded-[2px] border px-2 py-1 text-center font-mono text-[10px] leading-tight break-words backdrop-blur-sm transition-colors ${
                 active
-                  ? "border-neon bg-void/85 text-chalk"
-                  : "border-line/70 bg-void/70 text-mist hover:border-neon/60 hover:text-chalk"
+                  ? "border-neon bg-panel text-chalk"
+                  : "border-line bg-panel/85 text-mist hover:border-neon/60 hover:text-chalk"
               }`}
               style={{ transform: "translate(-50%,-50%)", opacity: 0 }}
             >
@@ -764,7 +837,7 @@ function ArchitectureSvgFallback({
               y1={a.top}
               x2={b.left}
               y2={b.top}
-              stroke={hex(EDGE_COLOR[edge.kind])}
+              stroke={EDGE_VAR[edge.kind]}
               strokeWidth={1}
               vectorEffect="non-scaling-stroke"
               opacity={connected ? 0.6 : 0.12}
@@ -792,12 +865,12 @@ function ArchitectureSvgFallback({
             style={{
               left: `${p.left}%`,
               top: `${p.top}%`,
-              boxShadow: `0 0 0 1px ${hex(KIND_COLOR[node.kind])}40`,
+              boxShadow: `0 0 0 1px color-mix(in srgb, ${KIND_VAR[node.kind]} 30%, transparent)`,
             }}
           >
             <span
               className="me-1.5 inline-block h-2 w-2 rounded-[2px] align-middle"
-              style={{ background: hex(KIND_COLOR[node.kind]) }}
+              style={{ background: KIND_VAR[node.kind] }}
             />
             {node.short}
           </button>

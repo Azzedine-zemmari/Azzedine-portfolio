@@ -3,17 +3,28 @@ import { Play, AlertTriangle, ShieldCheck, Loader2 } from "lucide-react";
 import type { ApiExample } from "../../data/engineering";
 import { useEngineering, useT } from "../../i18n";
 
+/**
+ * HTTP method badges are *categories*, not statuses, so they keep their own
+ * hues from the token set (cyan = read, teal = write, amber = update,
+ * red = destructive). The method name itself is always rendered next to the
+ * colour, so meaning never depends on colour alone.
+ */
 const METHOD_COLOR: Record<ApiExample["method"], string> = {
-  GET: "text-cyan border-cyan/40",
-  POST: "text-neon border-neon/40",
-  PUT: "text-amber border-amber/40",
-  DELETE: "text-neon border-neon/40",
+  GET: "text-cyan border-cyan/45",
+  POST: "text-neon border-neon/45",
+  PUT: "text-amber border-amber/45",
+  DELETE: "text-danger border-danger/45",
 };
 
+/**
+ * Response status uses the dedicated status tokens so success, client error
+ * and server error are distinguishable — and are always shown alongside the
+ * numeric code, never as colour alone.
+ */
 function statusColor(status: number): string {
-  if (status >= 200 && status < 300) return "text-cyan border-cyan/40";
-  if (status >= 400 && status < 500) return "text-neon border-neon/40";
-  return "text-neon border-neon/40";
+  if (status >= 200 && status < 300) return "text-success border-success/45";
+  if (status >= 400 && status < 500) return "text-amber border-amber/45";
+  return "text-danger border-danger/45";
 }
 
 export function ApiPlayground() {
@@ -176,7 +187,7 @@ export function ApiPlayground() {
               ) : (
                 <div>
                   {outcome && (
-                    <p className="mb-2 flex items-start gap-2 text-[11px] leading-relaxed text-neon">
+                    <p className="mb-2 flex items-start gap-2 text-[11px] leading-relaxed text-danger">
                       <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                       <span>{outcome.why}</span>
                     </p>

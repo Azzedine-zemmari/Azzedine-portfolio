@@ -90,9 +90,54 @@
 }
 
 /* ------------------------------------------------------------------
-   DESIGN TOKENS â€” "Ink & Signal"
-   Near-black ink, bone text, hairline rules, one warm signal accent.
-   (Token names are kept stable; only the values carry the art direction.)
+   DESIGN TOKENS — "Signal"
+   Deep blue-black ink, cool off-white paper, one electric teal signal
+   accent plus a cool blue support accent.
+
+   Every token below has a value in BOTH themes. The dark values live in
+   `@theme` (Tailwind's root, i.e. the default) and the light values
+   override them under `:root[data-theme="light"]`, so swapping the
+   attribute re-skins every `bg-*` / `text-*` / `border-*` utility and
+   every component class in one step.
+
+   Token names are preserved from the previous palette so existing
+   utilities (`bg-void`, `text-chalk`, `text-mist`, `text-dim`,
+   `text-neon`, `border-line`, `border-line-2`, …) keep compiling.
+
+   Token map — read this before adding a colour anywhere:
+
+     SURFACES (page → raised)
+       --color-void     page background / deepest surface
+       --color-abyss    recessed band behind a page section
+       --color-panel    card, panel, dialog, dropdown
+       --color-panel-2  hovered / inset / secondary panel fill
+     BORDERS
+       --color-line     decorative hairline: card edge, dividers, rules
+       --color-line-2   emphasised hairline: hovered border, table grid
+       --color-control  boundary of an interactive control (button,
+                        input, select). Must clear 3:1 on every surface.
+     TEXT
+       --color-chalk    primary text, headings, active labels
+       --color-mist     secondary text, body copy, metadata
+       --color-dim      muted text: eyebrows, timestamps, captions.
+                        Still >= 4.5:1 — never a "barely there" grey.
+     ACCENTS
+       --color-neon     PRIMARY accent: links, active/selected states,
+                        focus ring, primary button fill, diagram signal
+       --color-neon-dim pressed/hover accent on a filled control
+       --color-cyan     SECONDARY accent: supporting info, relations,
+                        FK markers, secondary diagram category
+       --color-violet   tertiary diagram category (kept for legacy SVGs)
+       --color-on-neon  foreground ON the accent fill. Never assume white.
+     STATUS  (always paired with an icon or text label, never colour alone)
+       --color-amber    warning
+       --color-success  success
+       --color-danger   error / destructive
+     ATMOSPHERE
+       --panel-highlight 1px inner top light on a raised panel
+       --panel-shadow    drop shadow tint
+       --vignette-color  radial edge darkening
+       --grain-opacity   film-grain strength
    ------------------------------------------------------------------ */
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
@@ -100,69 +145,98 @@
     Consolas, monospace;
   --font-serif: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
 
-  --color-void: #0a0a0b;
-  --color-abyss: #0e0e10;
-  --color-panel: #131316;
-  --color-panel-2: #191920;
-  --color-line: #26262c;
-  --color-line-2: #3b3b43;
+  /* ---- surfaces: deep blue-black ---- */
+  --color-void: #080b11;
+  --color-abyss: #0c1118;
+  --color-panel: #111823;
+  --color-panel-2: #18202b;
 
-  --color-chalk: #edeae3;
-  --color-mist: #a7a49c;
-  --color-dim: #6e6c65;
+  /* ---- borders ---- */
+  --color-line: #232d3a;
+  --color-line-2: #39485a;
+  /* interactive-control boundary — 3:1+ on void/abyss/panel/panel-2 */
+  --color-control: #66768f;
 
-  /* single signal accent */
-  --color-neon: #ff5b2e;
-  --color-neon-dim: #c2411d;
-  /* foreground used on top of the accent (buttons) */
-  --color-on-neon: #0a0a0b;
-  /* secondary: muted amber, used sparingly */
-  --color-cyan: #d8a95c;
-  /* neutralised â€” no purple in this direction */
-  --color-violet: #8b8880;
-  --color-amber: #d8a95c;
-  --color-danger: #ff7a68;
+  /* ---- text ---- */
+  --color-chalk: #eef2f7;
+  --color-mist: #a4b1c1;
+  --color-dim: #8593a4;
 
-  /* elevation / atmosphere knobs (overridden per theme) */
-  --panel-highlight: rgba(255, 255, 255, 0.025);
-  --panel-shadow: rgba(0, 0, 0, 0.9);
-  --vignette-color: rgba(0, 0, 0, 0.55);
-  --grain-opacity: 0.045;
+  /* ---- accents ---- */
+  --color-neon: #2fd8bd;
+  --color-neon-dim: #24b8a0;
+  /* dark foreground on the bright teal fill */
+  --color-on-neon: #04211d;
+  --color-cyan: #5fb3ea;
+  --color-violet: #8a9bb0;
+
+  /* ---- status ---- */
+  --color-amber: #e9b24c;
+  --color-success: #3fd68c;
+  --color-danger: #f79083;
+
+  /* ---- atmosphere ---- */
+  --panel-highlight: rgba(255, 255, 255, 0.035);
+  --panel-shadow: rgba(0, 0, 0, 0.75);
+  --vignette-color: rgba(2, 5, 10, 0.6);
+  --grain-opacity: 0.04;
+
+  /* ---- focus ring: 3:1+ on every surface ---- */
+  --focus-ring: var(--color-neon);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
 }
 
 /* ------------------------------------------------------------------
-   LIGHT THEME â€” "Ink & Signal", inverted to bone paper.
+   LIGHT THEME — "Signal" on cool paper.
    `data-theme` is set before first paint (see index.html) from the stored
    preference or the OS setting, so there is no flash of the wrong theme.
-   Overriding the token values alone re-skins every Tailwind utility that
-   references them, plus the component classes below.
+   Only the values change; every token name — and therefore every utility
+   and component class — stays identical.
+
+   The accent is deliberately darker here: a teal light enough to read on
+   #080b11 would fail AA on white paper, so the accent gets its own
+   per-theme value instead of forcing one colour to work everywhere.
    ------------------------------------------------------------------ */
 :root[data-theme="light"] {
-  --color-void: #f4f1ea;
-  --color-abyss: #ece8df;
-  --color-panel: #fffdf9;
-  --color-panel-2: #f3efe7;
-  --color-line: #ddd7ca;
-  --color-line-2: #c2bcac;
+  /* ---- surfaces: cool off-white ---- */
+  --color-void: #f5f7f9;
+  --color-abyss: #eef1f5;
+  --color-panel: #ffffff;
+  --color-panel-2: #f2f5f8;
 
-  --color-chalk: #17150f;
-  --color-mist: #55524a;
-  --color-dim: #8a867c;
+  /* ---- borders ---- */
+  --color-line: #dce2e9;
+  --color-line-2: #a9b6c4;
+  --color-control: #74839a;
 
-  /* darkened so accent text/fills keep AA contrast on light paper */
-  --color-neon: #d64413;
-  --color-neon-dim: #a83410;
-  --color-on-neon: #fffdf9;
-  --color-cyan: #916a17;
-  --color-violet: #6f6b62;
-  --color-amber: #916a17;
-  --color-danger: #c0392b;
+  /* ---- text: dark slate on paper ---- */
+  --color-chalk: #101a24;
+  --color-mist: #48586a;
+  --color-dim: #5d6c7e;
 
-  --panel-highlight: rgba(255, 255, 255, 0.6);
-  --panel-shadow: rgba(31, 26, 15, 0.14);
-  --vignette-color: rgba(31, 26, 15, 0.16);
-  --grain-opacity: 0.035;
+  /* ---- accents: darkened for AA on light paper ---- */
+  --color-neon: #0c7263;
+  --color-neon-dim: #095a4e;
+  /* white foreground on the deep teal fill */
+  --color-on-neon: #ffffff;
+  --color-cyan: #0d5f96;
+  --color-violet: #55657a;
+
+  /* ---- status ---- */
+  --color-amber: #7a5200;
+  --color-success: #10693a;
+  --color-danger: #b0221b;
+
+  /* ---- atmosphere ---- */
+  --panel-highlight: rgba(255, 255, 255, 0.9);
+  --panel-shadow: rgba(16, 26, 36, 0.16);
+  --vignette-color: rgba(16, 26, 36, 0.12);
+  --grain-opacity: 0.03;
+
+  --focus-ring: var(--color-neon);
 }
+
 
 /* ------------------------------------------------------------------
    RTL & ARABIC â€” the self-hosted Latin faces carry no Arabic glyphs, so
@@ -236,14 +310,16 @@
     overflow-x: hidden;
   }
 
+  /* Selection uses the accent's own foreground token so the highlight is
+     readable in both themes (teal-on-paper in light, ink-on-teal in dark). */
   ::selection {
     background: var(--color-neon);
-    color: var(--color-void);
+    color: var(--color-on-neon);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-neon);
-    outline-offset: 3px;
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
     border-radius: 1px;
   }
 
@@ -255,12 +331,12 @@
     background: var(--color-void);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-line-2);
+    background: var(--color-control);
     border-radius: 0;
     border: 2px solid var(--color-void);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-dim);
+    background: var(--color-neon);
   }
   ::-webkit-scrollbar-corner {
     background: var(--color-void);
@@ -411,6 +487,9 @@
   }
 
   /* Buttons ------------------------------------------------------------ */
+  /* `border-color` comes from `--color-control` (3:1 on every surface)
+     rather than `--color-line-2`, so the outline of an unfilled button
+     stays a perceivable control boundary in both themes. */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -423,19 +502,19 @@
     text-transform: uppercase;
     padding: 0.65rem 1.05rem;
     border-radius: 3px;
-    border: 1px solid var(--color-line-2);
+    border: 1px solid var(--color-control);
     color: var(--color-chalk);
     background: transparent;
     cursor: pointer;
     transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     /* Long translated labels wrap instead of overflowing their row. */
-    /* Allow wrapping for longer labels; keep centered. */
     white-space: normal;
     overflow-wrap: break-word;
     word-break: break-word;
+  }
   .btn:hover {
-    border-color: var(--color-chalk);
-    color: var(--color-chalk);
+    border-color: var(--color-neon);
+    color: var(--color-neon);
   }
   .btn:active {
     transform: translateY(1px);
@@ -447,8 +526,8 @@
     color: var(--color-on-neon);
   }
   .btn-primary:hover {
-    background: color-mix(in srgb, var(--color-neon) 82%, #000);
-    border-color: color-mix(in srgb, var(--color-neon) 82%, #000);
+    background: var(--color-neon-dim);
+    border-color: var(--color-neon-dim);
     color: var(--color-on-neon);
   }
 
@@ -462,7 +541,6 @@
     color: var(--color-neon);
     border-color: transparent;
   }
-}
 
   /* Chips / tags -------------------------------------------------------- */
   .tag {
@@ -484,10 +562,13 @@
   }
 
   /* Forms --------------------------------------------------------------- */
+  /* The input outline is the control's only boundary, so it uses the
+     dedicated `--color-control` token (3:1+ on every surface) instead of
+     the decorative `--color-line-2` hairline. */
   .field {
     width: 100%;
-    background: color-mix(in srgb, var(--color-abyss) 90%, transparent);
-    border: 1px solid var(--color-line-2);
+    background: var(--color-panel);
+    border: 1px solid var(--color-control);
     border-radius: 3px;
     padding: 0.7rem 0.85rem;
     color: var(--color-chalk);
@@ -501,7 +582,7 @@
   .field:focus {
     outline: none;
     border-color: var(--color-neon);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-neon) 14%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-neon) 30%, transparent);
   }
   .field:disabled {
     opacity: 0.55;
@@ -593,12 +674,17 @@
 /* Focus styles for 3D elements */
 @layer components {
   .focus-3d:focus-visible {
-    outline: 2px solid var(--color-neon);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 4px;
     border-radius: 4px;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-neon) 20%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-neon) 30%, transparent);
   }
 }
+
+/* Native form controls (checkboxes, radios, range, selects, spinners) are
+   painted by the UA. `color-scheme` on <html> — set per theme in the base
+   layer — tells it which light/dark widget set to use, so controls and their
+   focus rings follow the active theme without any hardcoded overrides. */
 
 /* ------------------------------------------------------------------
    ANIMATIONS

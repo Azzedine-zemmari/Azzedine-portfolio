@@ -23,6 +23,9 @@ function emit() {
   for (const listener of listeners) listener();
 }
 
+/** Page background per theme — must match `--color-void` in src/index.css. */
+const THEME_COLOR = { dark: "#080b11", light: "#f5f7f9" } as const;
+
 function apply(theme: Theme, persist: boolean) {
   if (typeof document === "undefined") return;
   const el = document.documentElement;
@@ -30,7 +33,7 @@ function apply(theme: Theme, persist: boolean) {
   el.style.colorScheme = theme;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    meta.setAttribute("content", theme === "light" ? "#f4f1ea" : "#0a0a0b");
+    meta.setAttribute("content", THEME_COLOR[theme]);
   }
   if (persist) {
     try {

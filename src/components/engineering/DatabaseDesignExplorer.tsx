@@ -148,7 +148,11 @@ export function DatabaseDesignExplorer() {
                       width={BOX_W}
                       height={HEADER_H}
                       rx={3}
-                      fill={active ? "rgba(255,91,46,0.14)" : "var(--color-panel-2)"}
+                      fill={
+                        active
+                          ? "color-mix(in srgb, var(--color-neon) 18%, var(--color-panel-2))"
+                          : "var(--color-panel-2)"
+                      }
                     />
                     <text
                       x={12}

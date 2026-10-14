@@ -85,7 +85,7 @@ export function BackgroundScene({ canvasRef, progressRef }: BackgroundSceneProps
       if (glowMaterial) glowMaterial.blending = blending;
       particleMaterial.blending = blending;
       starMaterial.blending = blending;
-      starMaterial.uniforms.uColor.value.set(light ? 0x2a2620 : 0xffffff);
+      starMaterial.uniforms.uColor.value.set(light ? PAPER_STAR : 0xffffff);
     };
     applyTheme(document.documentElement.getAttribute("data-theme") === "light");
 
@@ -162,12 +162,29 @@ function disposeObject(root: THREE.Object3D) {
   });
 }
 
+/**
+ * Decorative scene colours.
+ *
+ * This is an ambient background, not content, so these values are not
+ * theme tokens — but they must still belong to the same palette as the UI
+ * or the scene fights the interface. They mirror the dark-theme accent ramp
+ * from `src/index.css`: electric teal core, cool blue support.
+ *
+ * The scene also re-skins itself per theme (see `applyTheme` below) because
+ * additive blending and emissive intensity read very differently on a deep
+ * blue-black background than on white paper.
+ */
+const ACCENT_CORE = 0x2fd8bd; // --color-neon (dark)
+const ACCENT_WARM = 0x24b8a0; // --color-neon-dim (dark)
+const ACCENT_COOL = 0x5fb3ea; // --color-cyan (dark)
+const PAPER_STAR = 0x48586a; // --color-mist (light)
+
 function createCenterpiece(): THREE.Group {
   const group = new THREE.Group();
 
   const coreGeometry = new THREE.IcosahedronGeometry(1.2, 3);
   const coreMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xff5b2e,
+    color: ACCENT_CORE,
     metalness: 0.9,
     roughness: 0.1,
     clearcoat: 1,
@@ -197,7 +214,7 @@ function createCenterpiece(): THREE.Group {
 
   const wireGeometry = new THREE.IcosahedronGeometry(1.8, 1);
   const wireMaterial = new THREE.MeshBasicMaterial({
-    color: 0xff5b2e,
+    color: ACCENT_CORE,
     wireframe: true,
     transparent: true,
     opacity: 0.15,
@@ -211,7 +228,7 @@ function createCenterpiece(): THREE.Group {
   const glowMaterial = new THREE.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
-      uColor: { value: new THREE.Color(0xff5b2e) },
+      uColor: { value: new THREE.Color(ACCENT_CORE) },
     },
     vertexShader: `
       varying vec3 vNormal;
@@ -253,8 +270,8 @@ function createParticleField(scene: THREE.Scene): THREE.Points {
   const alphas = new Float32Array(count);
   const velocities = new Float32Array(count * 3);
 
-  const color1 = new THREE.Color(0xff5b2e);
-  const color2 = new THREE.Color(0xffaa44);
+  const color1 = new THREE.Color(ACCENT_CORE);
+  const color2 = new THREE.Color(ACCENT_COOL);
   const color3 = new THREE.Color(0xffffff);
 
   for (let i = 0; i < count; i++) {
@@ -412,7 +429,8 @@ function createOrbitRings(group: THREE.Group): THREE.Group {
       128
     );
     const ringMaterial = new THREE.MeshBasicMaterial({
-      color: i === 0 ? 0xff5b2e : i === 1 ? 0xffaa44 : 0xffffff,
+      color:
+        i === 0 ? ACCENT_CORE : i === 1 ? ACCENT_WARM : ACCENT_COOL,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0.2 - i * 0.05,
@@ -429,7 +447,7 @@ function createOrbitRings(group: THREE.Group): THREE.Group {
 
     const orbitGeometry = new THREE.TorusGeometry(radius + 0.3, 0.02, 16, 100);
     const orbitMaterial = new THREE.MeshBasicMaterial({
-      color: 0xff5b2e,
+      color: ACCENT_CORE,
       transparent: true,
       opacity: 0.1,
       depthWrite: false,
@@ -453,16 +471,18 @@ function createFloatingOrbs(group: THREE.Group): THREE.Group {
     const size = 0.08 + Math.random() * 0.12;
     const geometry = new THREE.IcosahedronGeometry(size, 1);
     const material = new THREE.MeshPhysicalMaterial({
+      // Hue band 0.44–0.54 walks from teal to sky blue, matching the accent
+      // ramp in src/index.css, so the orbs sit inside the same palette.
       color: new THREE.Color().setHSL(
-        Math.random() * 0.1 + 0.02,
-        0.9,
-        0.5 + Math.random() * 0.3
+        0.44 + Math.random() * 0.1,
+        0.75,
+        0.5 + Math.random() * 0.25
       ),
       metalness: 0.7,
       roughness: 0.2,
       clearcoat: 1,
       clearcoatRoughness: 0,
-      emissive: new THREE.Color(0xff5b2e),
+      emissive: new THREE.Color(ACCENT_CORE),
       emissiveIntensity: 0.3,
     });
     const orb = new THREE.Mesh(geometry, material);
@@ -497,11 +517,11 @@ function createLighting(scene: THREE.Scene): THREE.AmbientLight {
   const ambient = new THREE.AmbientLight(0x222222, 0.5);
   scene.add(ambient);
 
-  const keyLight = new THREE.DirectionalLight(0xff5b2e, 2);
+  const keyLight = new THREE.DirectionalLight(ACCENT_CORE, 2);
   keyLight.position.set(5, 10, 7);
   scene.add(keyLight);
 
-  const fillLight = new THREE.DirectionalLight(0xffaa44, 1);
+  const fillLight = new THREE.DirectionalLight(ACCENT_COOL, 1);
   fillLight.position.set(-5, 5, -5);
   scene.add(fillLight);
 
@@ -509,7 +529,7 @@ function createLighting(scene: THREE.Scene): THREE.AmbientLight {
   rimLight.position.set(0, -10, -10);
   scene.add(rimLight);
 
-  const pointLight1 = new THREE.PointLight(0xff5b2e, 2, 20);
+  const pointLight1 = new THREE.PointLight(ACCENT_CORE, 2, 20);
   pointLight1.position.set(3, 3, 3);
   scene.add(pointLight1);
 

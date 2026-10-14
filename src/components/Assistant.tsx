@@ -125,10 +125,10 @@ export function Assistant() {
         aria-expanded={open}
         aria-controls="assistant-panel"
         onClick={() => setOpen((v) => !v)}
-        className={`fixed end-4 bottom-4 z-50 flex h-12 items-center gap-2 rounded border px-4 font-mono text-xs tracking-widest uppercase shadow-lg shadow-black/50 transition-colors sm:end-6 sm:bottom-6 ${
+        className={`fixed end-4 bottom-4 z-50 flex h-12 items-center gap-2 rounded border px-4 font-mono text-xs tracking-widest uppercase shadow-[0_10px_30px_-10px_var(--panel-shadow)] transition-colors sm:end-6 sm:bottom-6 ${
           open
             ? "border-line-2 bg-panel-2 text-mist"
-            : "border-neon bg-neon text-void hover:bg-neon-dim hover:border-neon-dim"
+            : "border-neon bg-neon text-on-neon hover:bg-neon-dim hover:border-neon-dim"
         }`}
       >
         {open ? (
@@ -144,7 +144,7 @@ export function Assistant() {
         <section
           id="assistant-panel"
           aria-label={t("assistant.aria")}
-          className="panel fixed inset-x-3 bottom-20 z-50 flex max-h-[75dvh] flex-col overflow-hidden shadow-2xl shadow-black/70 sm:inset-x-auto sm:end-6 sm:bottom-22 sm:w-[390px]"
+          className="panel fixed inset-x-3 bottom-20 z-50 flex max-h-[75dvh] flex-col overflow-hidden shadow-[0_24px_60px_-20px_var(--panel-shadow)] sm:inset-x-auto sm:end-6 sm:bottom-22 sm:w-[390px]"
         >
           <header className="flex items-center gap-2.5 border-b border-line bg-abyss/80 px-4 py-2.5">
             <span className="h-1.5 w-1.5 bg-neon" aria-hidden="true" />

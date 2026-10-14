@@ -21,7 +21,8 @@
       el.setAttribute("data-theme", theme);
       el.style.colorScheme = theme;
       var meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute("content", theme === "light" ? "#f4f1ea" : "#0a0a0b");
+      // Must match --color-void in src/index.css for each theme.
+      if (meta) meta.setAttribute("content", theme === "light" ? "#f5f7f9" : "#080b11");
 
       // Locale: same idea — resolve the stored language before first paint so
       // the document language and writing direction are correct with no flash.
@@ -59,7 +60,7 @@
   <meta name="author" content="Zemmari Azzedine" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://azzedine-portfolio.vercel.app/" />
-  <meta name="theme-color" content="#0a0a0b" />
+  <meta name="theme-color" content="#080b11" />
   <meta name="color-scheme" content="dark light" />
 
   <!-- Open Graph -->
@@ -116,16 +117,19 @@
 <body class="bg-void text-chalk">
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
+  <!-- No-JS fallback. Only ever painted with the default (dark) palette,
+       since resolving the stored preference needs the script above. Colours
+       match the dark tokens in src/index.css. -->
   <noscript>
-    <div style="padding: 2rem; font-family: monospace; color: #edeae3; background: #0a0a0b; min-height: 100vh;">
+    <div style="padding: 2rem; font-family: monospace; color: #eef2f7; background: #080b11; min-height: 100vh;">
       <h1>Zemmari Azzedine — Full-Stack Developer</h1>
       <p>
         This portfolio uses JavaScript for its interactive terminal.
         All essential information is also in the page source and indexable by
         search engines. Reach me at
-        <a style="color:#ff5b2e" href="mailto:azzedinezemmari@gmail.com">azzedinezemmari@gmail.com</a>
+        <a style="color:#2fd8bd" href="mailto:azzedinezemmari@gmail.com">azzedinezemmari@gmail.com</a>
         or on GitHub at
-        <a style="color:#ff5b2e" href="https://github.com/Azzedine-zemmari">github.com/Azzedine-zemmari</a>.
+        <a style="color:#2fd8bd" href="https://github.com/Azzedine-zemmari">github.com/Azzedine-zemmari</a>.
       </p>
     </div>
   </noscript>
