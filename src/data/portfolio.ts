@@ -39,6 +39,9 @@ export interface JourneyEntry {
   title: string;
   org: string;
   description: string;
+  stack: string[];
+  highlights: string[];
+  current?: boolean;
 }
 
 export const site = {
@@ -227,31 +230,41 @@ export const projects: Project[] = [
 
 export const journey: JourneyEntry[] = [
   {
-    period: "2024 — 2026",
-    title: "Full-Stack Developer Training",
-    org: "Youcode (UM6P)",
+    period: "May 2026 — Present",
+    title: "Full-Stack Developer (Intern)",
+    org: "Eurofive",
     description:
-      "Comprehensive program in web development, frontend and backend technologies, and problem-solving. Daily project-based work with Java, Spring Boot, Angular, databases, testing, agile practices, and CI/CD fundamentals.",
+      "Full-stack development on an enterprise project-management platform for the banking sector, used by large clients such as BMCE.",
+    stack: ["Java 17", "Spring Boot", "JPA/Hibernate", "Angular", "SCSS", "PostgreSQL", "Keycloak", "Podman","OpenShift"],
+    highlights: [
+      "Active contribution to an enterprise project-management platform for the banking sector, used by large clients such as BMCE.",
+      "Full-stack development with Spring Boot and Angular: REST APIs and PostgreSQL integration.",
+      "Testing, access security with Keycloak, containerization with Podman, and deployments.",
+    ],
+    current: true,
   },
   {
-    period: "2023 — 2024",
-    title: "Freelance Developer",
-    org: "Self-learning & freelance projects",
+    period: "May 2025 — Jul 2025",
+    title: "Full-Stack Developer (Intern)",
+    org: "Atrait Technologies",
     description:
-      "Worked on real-world projects to strengthen web development and programming skills: Vue.js, React, TypeScript, Node.js/Express, PostgreSQL, MongoDB, responsive design, Docker basics, and client communication.",
+      "Contributed to an e-commerce platform for electrical products and renewable energy.",
+    stack: ["Laravel", "Vue.js", "PostgreSQL", "Docker", "Tailwind CSS","Git & GitHub", "REST APIs" ],
+    highlights: [
+      "Contributed to an e-commerce platform dedicated to electrical products and renewable energy.",
+      "Backend development, business logic and frontend interfaces with Laravel, PostgreSQL, Vue.js and Tailwind CSS.",
+    ],
   },
   {
-    period: "2021 — 2023",
-    title: "Specialized Technician Diploma",
-    org: "NTIC Training Center",
+    period: "Mar 2023 — Apr 2023",
+    title: "Frontend Developer (Intern)",
+    org: "Salvia",
     description:
-      "Programming fundamentals, web development, and database management: HTML/CSS, JavaScript, TailwindCSS, Bootstrap, PHP/Laravel, React, Node.js, Express, MySQL, REST APIs, Git, and agile basics.",
-  },
-  {
-    period: "2020 — 2021",
-    title: "Baccalaureate — Life & Earth Sciences",
-    org: "Ibn Khaldoun High School",
-    description: "Specialized in Life and Earth Sciences. Graduated with honors.",
+      "Built React.js interfaces and integrated REST APIs for an ERP platform.",
+    stack: ["React.js", "Tailwind CSS","HTML","TypeScript","REST APIs" , "Agile workflow" , "Git & GitHub"],
+    highlights: [
+      "Built React.js interfaces and integrated REST APIs in an Agile team for an ERP platform.",
+    ],
   },
 ];
 

@@ -71,22 +71,38 @@ export function Experience() {
 
         <ol className="experience-timeline relative ms-1 border-s border-line-2 ps-6 md:ms-3 md:ps-10">
           {journey.map((entry, index) => (
-            <Reveal as="li" key={entry.title} delay={index * 80} className="timeline-item relative pb-10 last:pb-0">
+            <Reveal as="li" key={`${entry.org}-${entry.period}`} delay={index * 80} className="timeline-item relative pb-10 last:pb-0">
               <span
-                className="absolute top-2 -start-[calc(1.5rem+3px)] h-[7px] w-[7px] border border-neon bg-void md:-start-[calc(2.5rem+3px)]"
+                className={`absolute top-2 -start-[calc(1.5rem+3px)] h-[7px] w-[7px] border border-neon md:-start-[calc(2.5rem+3px)] ${entry.current ? "bg-neon" : "bg-void"
+                  }`}
                 aria-hidden="true"
               />
 
-              <div className="panel panel-hover p-5 md:p-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-neon/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true" />
-                <p className="eyebrow mb-2.5 text-neon relative z-10">{entry.period}</p>
-                <h3 className="text-lg font-semibold tracking-tight text-chalk md:text-xl relative z-10">
+              <div className="panel panel-hover group relative overflow-hidden p-5 md:p-6">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-neon/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  aria-hidden="true"
+                />
+                <p className="eyebrow relative z-10 mb-2.5 text-neon">{entry.period}</p>
+                <h3 className="relative z-10 text-lg font-semibold tracking-tight text-chalk md:text-xl">
                   {entry.title}
                 </h3>
-                <p className="mt-1 font-mono text-sm text-cyan relative z-10">{entry.org}</p>
-                <p className="mt-3 text-sm leading-relaxed text-mist text-pretty relative z-10">
-                  {entry.description}
-                </p>
+                <p className="relative z-10 mt-1 font-mono text-sm text-cyan">{entry.org}</p>
+
+                <ul className="relative z-10 mt-4 space-y-2 text-sm leading-relaxed text-mist">
+                  {entry.highlights.map((h) => (
+                    <li key={h} className="flex gap-2.5">
+                      <span className="mt-[0.15rem] text-neon" aria-hidden="true">›</span>
+                      <span className="text-pretty">{h}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <ul className="relative z-10 mt-4 flex flex-wrap gap-1.5">
+                  {entry.stack.map((tech) => (
+                    <li key={tech} className="tag">{tech}</li>
+                  ))}
+                </ul>
               </div>
             </Reveal>
           ))}
