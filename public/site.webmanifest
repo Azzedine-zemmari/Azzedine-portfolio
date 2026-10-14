@@ -1,0 +1,16 @@
+{
+  "name": "Zemmari Azzedine — Full-Stack Developer",
+  "short_name": "Z. Azzedine",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04060a",
+  "theme_color": "#04060a",
+  "description": "Portfolio of Zemmari Azzedine, full-stack developer (Spring Boot & Angular) in Casablanca, Morocco.",
+  "icons": [
+    {
+      "src": "/profile.jpg",
+      "sizes": "any",
+      "type": "image/jpeg"
+    }
+  ]
+}

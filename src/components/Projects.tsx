@@ -1,126 +1,203 @@
-function Projects() {
-    const projects = [
-        {
-            title: "Healthcare Tele-Expertise Workflow System",
-            description: "A complete medical tele-expertise system enabling collaboration between nurses, general practitioners, and specialists.The project manages the entire patient journey: onboarding, consultations, expertise requests, specialist scheduling, and delivery of medical opinions.It includes secure authentication and advanced business logic.",
-            tech: ["Jakarta EE", "Tomcat", "PostgreSQL", "Hibernate","Maven"],
-            year: "2025",
-            link: "https://github.com/Azzedine-zemmari/tele-expertise-medicale.git"
-        },
-        {
-            title: "Inventory & Supplier Orders Management System",
-            description:"Application for managing supplier orders, products, stock movements, and inventory valuation (CUMP)",
-            tech: ["Spring Boot", "Spring Data JPA", "MapStruct", "Liquibase","Swagger","MySql"],
-            link: "https://github.com/Azzedine-zemmari/Tricol.git"
-        },
-        {
-            title: "Online Store & Inventory Management Platform",
-            description: "This project is a full-stack e-commerce platform built with Vue.js on the frontend, Laravel on the backend, and PostgreSQL as the database. It provides all essential features required for a modern online store, including user authentication, shopping cart management, order processing, invoicing, and role-based access control for administrators, sales staff, and product managers.The platform includes secure authentication using Laravel Sanctum, a structured MVC architecture, component-based frontend design, and advanced features such as Excel product import and PDF invoice generation.",
-            tech: ["Vue.js", "Laravel", "PostgreSQL", "Laravel Sanctum"],
-            link: "https://github.com/Azzedine-zemmari/Power_Eco"
-        },
-        {
-            title: "Event Management Web Application",
-            description: "comprehensive web platform designed to simplify and streamline music event management. It connects organizers, artists, attendees, and administrators within a modern, intuitive interface, making it easy to create, manage, and participate in concerts, festivals, and private events.",
-            tech: ["Laravel", "tailwindcss", "Postgres", "Javascript"],
-            link: "https://github.com/Azzedine-zemmari/THE_Beatwave"
-        },
-    ];
+import { ArrowUpRight, Github, ChevronDown } from "lucide-react";
+import { useContent, useRich, useT } from "../i18n";
+import { projectEngineering } from "../data/engineering";
+import { Reveal } from "./ui/Reveal";
+import { SectionHeading } from "./ui/SectionHeading";
 
-    return (
-        <div  id="projects" className="lg:mx-24 py-16">
-            <div className="flex flex-col justify-start mx-auto pl-10 mb-16">
-                {/* Section Label */}
-                <p className="text-amber-400 flex items-center text-xl gap-3 mb-8">
-                    <svg className="bg-amber-100 rounded-full p-1.5" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V7h16l.001 12H4z"/>
-                        <path d="M9.293 9.293 5.586 13l3.707 3.707 1.414-1.414L8.414 13l2.293-2.293zm5.414 0-1.414 1.414L15.586 13l-2.293 2.293 1.414 1.414L18.414 13z"/>
-                    </svg>
-                    <span className="tracking-widest font-semibold">PROJECTS</span>
-                </p>
+const STOPWORDS = new Set(["&", "and", "the", "of", "a", "an"]);
 
-                {/* Title */}
-                <h2 className="font-syne text-3xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-                    Things I've Built
-                </h2>
-                <p className="text-gray-600 text-lg">
-                    A collection of projects I'm proud of
-                </p>
-            </div>
+const engineeringByTitle = new Map(
+  projectEngineering.map((e) => [e.title, e])
+);
 
-            {/* Projects Grid */}
-            <div className="px-6 lg:px-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {projects.map((project, index) => (
-                        <div
-                            key={index}
-                            className="group relative bg-white border-2 border-gray-900 rounded-2xl p-8 hover:bg-gray-900 transition-all duration-300 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(251,191,36,1)] hover:-translate-x-1 hover:-translate-y-1"
-                        >
-                            {/* Year Badge */}
-                            {/* <div className="absolute -top-3 -right-3 bg-amber-400 text-gray-900 font-bold px-4 py-2 rounded-full border-2 border-gray-900 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                                {project.year}
-                            </div> */}
-
-                            {/* Project Number */}
-                            <div className="text-6xl font-bold text-gray-200 group-hover:text-gray-800 transition-colors duration-300 mb-4">
-                                {String(index + 1).padStart(2, '0')}
-                            </div>
-
-                            {/* Project Title */}
-                            <h3 className="font-syne text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white transition-colors duration-300 mb-4">
-                                {project.title}
-                            </h3>
-
-                            {/* Description */}
-                            <p className="text-gray-600 group-hover:text-gray-300 transition-colors duration-300 mb-6 leading-relaxed">
-                                {project.description}
-                            </p>
-
-                            {/* Tech Stack */}
-                            <div className="flex flex-wrap gap-2 mb-6">
-                                {project.tech.map((tech, techIndex) => (
-                                    <span
-                                        key={techIndex}
-                                        className="px-3 py-1 bg-gray-100 group-hover:bg-gray-800 text-gray-800 group-hover:text-gray-100 text-sm font-medium rounded-md border border-gray-300 group-hover:border-gray-600 transition-colors duration-300"
-                                    >
-                                        {tech}
-                                    </span>
-                                ))}
-                            </div>
-
-                            {/* View Project Link */}
-                            <a
-                                href={project.link}
-                                className="inline-flex items-center gap-2 text-gray-900 group-hover:text-amber-400 font-semibold transition-colors duration-300"
-                            >
-                                View Project
-                                <svg 
-                                    className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
-                                    fill="none" 
-                                    stroke="currentColor" 
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path 
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round" 
-                                        strokeWidth={2} 
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3" 
-                                    />
-                                </svg>
-                            </a>
-                        </div>
-                    ))}
-                </div>
-                <div className="flex justify-center items-center mt-5">
-                    <button 
-                    className="group relative inline-flex h-12 w-60 items-center justify-center gap-2 my-5 overflow-hidden rounded-md border-2 border-neutral-900 bg-white px-4 font-semibold text-neutral-900 transition-all duration-200 [box-shadow:5px_5px_0px_0px_rgb(82_82_82)] hover:[box-shadow:7px_7px_0px_0px_rgb(82_82_82)] hover:translate-x-[-2px] hover:translate-y-[-2px] active:translate-x-[3px] active:translate-y-[3px] active:[box-shadow:0px_0px_rgb(82_82_82)]">
-                    <a href="https://github.com/Azzedine-zemmari?tab=repositories" className="relative z-10">More ...</a>
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-50 to-orange-50 opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-md"></div>
-                </button>
-                </div>
-            </div>
-        </div>
-    );
+/** Two/three-letter monogram from a project title (no invented imagery). */
+function monogram(title: string): string {
+  const letters = title
+    .split(/\s+/)
+    .filter((word) => !STOPWORDS.has(word.toLowerCase()))
+    .slice(0, 3)
+    .map((word) => word[0])
+    .join("");
+  return letters.toUpperCase();
 }
 
-export default Projects;
+export function Projects() {
+  const t = useT();
+  const rich = useRich();
+  const { projects } = useContent();
+  return (
+    <section id="projects" className="scroll-mt-20 py-20 md:py-28">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <SectionHeading
+          index="04"
+          kicker={t("projects.kicker")}
+          title={rich(t("projects.title"))}
+          lead={t("projects.lead")}
+        />
+
+        <ol className="border-b border-line">
+          {projects.map((project, index) => (
+            <Reveal as="li" key={project.title} delay={index * 60}>
+              <article className="group grid gap-6 border-t border-line py-10 md:grid-cols-12 md:gap-10 md:py-14">
+                {/* monogram + index */}
+                <div className="flex items-center gap-5 md:col-span-3 md:flex-col md:items-start">
+                  <span className="index-num text-sm text-dim">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className="flex h-16 w-16 items-center justify-center border border-line-2 font-serif text-2xl text-mist transition-colors group-hover:border-neon group-hover:text-neon md:h-20 md:w-20 md:text-3xl"
+                    aria-hidden="true"
+                  >
+                    {monogram(project.title)}
+                  </span>
+                </div>
+
+                {/* body */}
+                <div className="md:col-span-6">
+                  <h3 className="display text-3xl text-chalk md:text-4xl">
+                    {project.title}
+                  </h3>
+                  <p className="mt-4 max-w-2xl leading-relaxed text-mist text-pretty">
+                    {project.summary}
+                  </p>
+
+                  <p className="eyebrow mt-8 mb-3">{t("projects.scope")}</p>
+                  <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
+                    {project.highlights.map((highlight) => (
+                      <li
+                        key={highlight}
+                        className="flex gap-2.5 text-[13px] leading-relaxed text-mist"
+                      >
+                        <span className="mt-2 h-px w-3 shrink-0 bg-neon" aria-hidden="true" />
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <EngineeringNotes eng={engineeringByTitle.get(project.title)} />
+                </div>
+                {/* meta */}
+                <div className="flex flex-col md:col-span-3">
+                  {project.year && (
+                    <p className="eyebrow mb-4">{project.year}</p>
+                  )}
+                  <ul className="flex flex-wrap gap-1.5">
+                    {project.stack.map((tech) => (
+                      <li key={tech}>
+                        <span className="tag">{tech}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    className="link-sweep mt-6 inline-flex w-fit items-center gap-1.5 font-mono text-xs tracking-widest text-chalk uppercase transition-colors hover:text-neon"
+                    href={project.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Github className="h-3.5 w-3.5" aria-hidden="true" />
+                    {t("projects.source")}
+                    <span className="sr-only">
+                      {" "}
+                      {t("projects.sourceFor", { title: project.title })}
+                    </span>
+                    <ArrowUpRight
+                      className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </ol>
+
+        <Reveal className="mt-12 flex flex-wrap items-center justify-between gap-4">
+          <p className="max-w-md font-mono text-xs leading-relaxed text-dim">
+            {t("projects.more")}
+          </p>
+          <a
+            className="btn"
+            href="https://github.com/Azzedine-zemmari?tab=repositories"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Github className="h-3.5 w-3.5" aria-hidden="true" />
+            {t("projects.allRepos")}
+          </a>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function EngineeringNotes({
+  eng,
+}: {
+  eng: (typeof projectEngineering)[number] | undefined;
+}) {
+  const t = useT();
+  if (!eng) return null;
+  return (
+    <details className="group/eng mt-8 border-t border-line pt-4">
+      <summary className="flex cursor-pointer items-center gap-2 font-mono text-[11px] tracking-widest text-mist uppercase transition-colors hover:text-neon [&::-webkit-details-marker]:hidden">
+        <ChevronDown
+          className="h-3.5 w-3.5 transition-transform group-open/eng:rotate-180"
+          aria-hidden="true"
+        />
+        {t("projects.eng.notes")}
+      </summary>
+      <div className="mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <p className="eyebrow mb-1.5">{t("projects.eng.problem")}</p>
+          <p className="text-[13px] leading-relaxed text-mist text-pretty">
+            {eng.problem}
+          </p>
+        </div>
+        <div className="sm:col-span-2">
+          <p className="eyebrow mb-1.5">{t("projects.eng.contribution")}</p>
+          <p className="text-[13px] leading-relaxed text-mist text-pretty">
+            {eng.contribution}
+          </p>
+        </div>
+        <div>
+          <p className="eyebrow mb-1.5">{t("projects.eng.backend")}</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {eng.backend.map((tech) => (
+              <li key={tech}>
+                <span className="tag">{tech}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p className="eyebrow mb-1.5">{t("projects.eng.frontend")}</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {eng.frontend.map((tech) => (
+              <li key={tech}>
+                <span className="tag">{tech}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p className="eyebrow mb-1.5">{t("projects.eng.data")}</p>
+          <p className="text-[13px] leading-relaxed text-mist text-pretty">
+            {eng.dataNotes}
+          </p>
+        </div>
+        <div>
+          <p className="eyebrow mb-1.5">{t("projects.eng.api")}</p>
+          <p className="text-[13px] leading-relaxed text-mist text-pretty">
+            {eng.apiNotes}
+          </p>
+        </div>
+        <div className="sm:col-span-2">
+          <p className="eyebrow mb-1.5">{t("projects.eng.quality")}</p>
+          <p className="text-[13px] leading-relaxed text-mist text-pretty">
+            {eng.quality}
+          </p>
+        </div>
+      </div>
+    </details>
+  );
+}

@@ -1,61 +1,81 @@
-import './App.css'
-import Header from './components/Header';
-import HeroSection from './components/HeroSection';
-import SocialSidebar from './components/SocialSidebar';
-import About from './components/About';
-import Education from './components/Education';
-import TechStack from './components/TechStack';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import { Nav } from "./components/Nav";
+import { SiteBackground } from "./components/SiteBackground";
+import { HeroSection } from "./components/HeroSection";
+import { About } from "./components/About";
+import { Skills } from "./components/Skills";
+import { Engineering } from "./components/Engineering";
+import { Projects } from "./components/Projects";
+import { Experience } from "./components/Experience";
+import { Contact } from "./components/Contact";
+import { Footer } from "./components/Footer";
+import { Assistant } from "./components/Assistant";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect } from "react";
+import { useT } from "./i18n";
 
-// Custom scrollbar styles
-const scrollbarStyles = `
-  ::-webkit-scrollbar {
-    width: 12px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #1a1a1a;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 6px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-`;
+gsap.registerPlugin(ScrollTrigger);
+
 function App() {
+  const t = useT();
+  useEffect(() => {
+    gsap.config({
+      nullTargetWarn: false,
+    });
+
+    ScrollTrigger.config({
+      limitCallbacks: true,
+      ignoreMobileResize: true,
+    });
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      gsap.globalTimeline.timeScale(0);
+    }
+
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handler = (e: MediaQueryListEvent) => {
+      gsap.globalTimeline.timeScale(e.matches ? 0 : 1);
+      ScrollTrigger.refresh();
+    };
+    mq.addEventListener("change", handler);
+
+    return () => {
+      mq.removeEventListener("change", handler);
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
+  }, []);
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
-      <div className="relative min-h-screen bg-white overflow-hidden">
-        {/* Soft orange circle - top right - Fixed across entire page */}
-        <div className="fixed -top-36 -right-20 w-64 h-64 md:w-96 md:h-96 bg-orange-200/30 rounded-full blur-3xl z-0"></div>
+      <SiteBackground />
+      <div className="grain" aria-hidden="true" />
+      <div className="vignette" aria-hidden="true" />
+      <a
+        href="#main"
+        className="btn btn-primary sr-only focus:not-sr-only focus:fixed focus:top-3 focus:start-3 focus:z-50"
+      >
+        {t("app.skip")}
+      </a>
 
-        {/* Soft green circle - bottom left - Fixed across entire page */}
-        <div className="fixed -bottom-20 -left-20 w-56 h-56 md:w-80 md:h-80 bg-emerald-200/25 rounded-full blur-3xl z-0"></div>
+      <div className="relative min-h-screen">
+        <Nav />
 
-        <div className="relative z-10">
-          <Header />
-          <SocialSidebar />
+        <main id="main" className="pt-16">
           <HeroSection />
-          <div className='my-1'>
-              <About/>
-          </div>
-          <Education/>
-          <TechStack/>
-          <Projects/>
-          <Contact/>
-          <Footer/>
-        </div>
+          <About />
+          <Skills />
+          <Engineering />
+          <Projects />
+          <Experience />
+          <Contact />
+        </main>
+
+        <Footer />
+        <Assistant />
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
